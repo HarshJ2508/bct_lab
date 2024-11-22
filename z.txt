@@ -1,0 +1,58 @@
+sudo ufw disable
+sudo iptables -L
+sudo iptables -F
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT // add rule to allow SSH traffic
+sudo iptables -D INPUT -p tcp --dport 22 -j ACCEPT // delete
+sudo iptables -P INPUT DROP  # Default to drop all incoming traffic
+sudo iptables -F
+
+sudo iptables -A OUTPUT -d x.x.x.x -j REJECT // nslookup
+
+sudo iptables -A INPUT -p tcp --dport 21 -s x.x.x.x -j REJECT // FTP
+sudo iptables -A INPUT -p tcp --dport 80 -s x.x.x.x -j REJECT // HTTP 
+sudo iptables -A INPUT -p tcp --dport 22 -s x.x.x.x -j REJECT // SSH
+sudo iptables -A INPUT -p tcp --dport 23 -s x.x.x.x -j REJECT // Telnet
+sudo iptables -A INPUT -p tcp --dport 443 -s x.x.x.x -j REJECT // HTTPS
+sudo iptables -A INPUT -p tcp --dport 25 -s x.x.x.x -j REJECT // SMTP
+sudo iptables -A INPUT -p tcp --dport 110 -s x.x.x.x -j REJECT // POP3
+sudo iptables -A INPUT -p tcp --dport 143 -s x.x.x.x -j REJECT // IMAP
+sudo iptables -A INPUT -p udp --dport 53 -s x.x.x.x -j REJECT // DNS
+sudo iptables -A INPUT -p tcp --dport 88 -s x.x.x.x -j REJECT // Kerberos
+=============================================================================
+sudo apt-get install gnupg
+sudo apt-get install kgpg
+
+// for user-1
+gpg --full-generate-key
+gpg --armor --export harsh.jain2@spit.ac.in > user1_public_key.txt
+
+// for user-2
+gpg --full-genrate-key	
+gpg --armor --export testerjain3575@gmail.com > user_public_key.txt
+
+// import user1 pub key in user2 system
+gpg --import user1_public_key.txt
+
+// import user2 pub key in user1 system
+gpg --import user2_public_key.txt
+
+gpg --encrypt --armor -r testerjain3575@gmail.com msg.txt // encrypt 
+
+gpg --decrypt msg.txt.asc
+
+// user1 sign msg with pvt key
+gpg --default-key harsh.jain2@spit.ac.in --sign msg.txt
+
+// user2 decrypt 
+gpg --verify msg.txt.gpg
+==========================================================================
+snort -i 4 -c D:/Snort/etc/snort.conf -T
+snort -i 4 -c D:/Snort/etc/snort.conf -A console
+
+alert icmp any any -> any any (msg:"Testing Msg for ICMP Protocol";sid:1000001;)
+alert tcp any any -> any 80 (msg:"HTTP traffic detected";sid:1000002;)
+alert tcp any any -> any 443 (msg:"HTTPS traffic detected";sid:1000003;)
+alert udp any any -> any 53 (msg:"DNS request detected";sid:1000004;)
+==========================================================================
+
+
